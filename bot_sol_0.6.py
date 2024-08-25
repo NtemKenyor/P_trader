@@ -22,8 +22,8 @@ PRIVATE_KEY_PATH = 'test-prv-key.pem'
 with open(PRIVATE_KEY_PATH, 'rb') as f:
     private_key = load_pem_private_key(data=f.read(), password=None)
 
-TRADES_API_URL = 'http://roynek.com/P_trader/'  # Replace with your actual server URL
-TRADES_API_URL = 'http://localhost/alltrenders/P_trader/'
+TRADES_API_URL = 'https://roynek.com/P_trader/'  # Replace with your actual server URL
+# TRADES_API_URL = 'http://localhost/alltrenders/P_trader/'
 
 TRADES_API_URL_IN = TRADES_API_URL+'trades_insert.php'
 TRADES_API_URL_DIS = TRADES_API_URL+'trades_display.php'
