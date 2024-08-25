@@ -5,23 +5,23 @@ require $_SERVER['DOCUMENT_ROOT']."/alltrenders/env_variables/accessor/accessor_
 // Prepare an array to hold the response
 $response = array("status" => "", "msg" => "", "row" => null);
 
-// Check if all necessary GET parameters are set
-if (isset($_GET['pair']) && isset($_GET['price']) && isset($_GET['quantity']) && 
-    isset($_GET['amount']) && isset($_GET['status']) && isset($_GET['conditioned']) && 
-    isset($_GET['addon']) && isset($_GET['comment'])) {
+// Check if all necessary POST parameters are set
+if (isset($_POST['pair']) && isset($_POST['price']) && isset($_POST['quantity']) && 
+    isset($_POST['amount']) && isset($_POST['status']) && isset($_POST['conditioned']) && 
+    isset($_POST['addon']) && isset($_POST['comment'])) {
 
-    // Retrieve GET data and sanitize inputs
-    $pair = htmlspecialchars($_GET['pair']);
-    $price = floatval($_GET['price']);
-    $quantity = floatval($_GET['quantity']);
-    $amount = floatval($_GET['amount']);
-    $status = intval($_GET['status']);
-    $hashed_key = htmlspecialchars($_GET['hashed_key']);
-    $order_placed = htmlspecialchars($_GET['order_placed']);
-    $profit = floatval($_GET['profit']);
-    $conditioned = intval($_GET['conditioned']);
-    $addon = htmlspecialchars($_GET['addon']);
-    $comment = htmlspecialchars($_GET['comment']);
+    // Retrieve POST data and sanitize inputs
+    $pair = htmlspecialchars($_POST['pair']);
+    $price = floatval($_POST['price']);
+    $quantity = floatval($_POST['quantity']);
+    $amount = floatval($_POST['amount']);
+    $status = intval($_POST['status']);
+    $hashed_key = htmlspecialchars($_POST['hashed_key']);
+    $order_placed = htmlspecialchars($_POST['order_placed']);
+    $profit = floatval($_POST['profit']);
+    $conditioned = intval($_POST['conditioned']);
+    $addon = htmlspecialchars($_POST['addon']);
+    $comment = htmlspecialchars($_POST['comment']);
     $datetime = date('Y-m-d H:i:s'); // Set current timestamp
 
     // Prepare the SQL statement
