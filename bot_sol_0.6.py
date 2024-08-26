@@ -22,8 +22,8 @@ PRIVATE_KEY_PATH = 'test-prv-key.pem'
 with open(PRIVATE_KEY_PATH, 'rb') as f:
     private_key = load_pem_private_key(data=f.read(), password=None)
 
-TRADES_API_URL = 'https://roynek.com/P_trader/'  # Replace with your actual server URL
-# TRADES_API_URL = 'http://localhost/alltrenders/P_trader/'
+# TRADES_API_URL = 'https://roynek.com/P_trader/'  # Replace with your actual server URL
+TRADES_API_URL = 'http://localhost/alltrenders/P_trader/'
 
 TRADES_API_URL_IN = TRADES_API_URL+'trades_insert.php'
 TRADES_API_URL_DIS = TRADES_API_URL+'trades_display.php'
@@ -141,24 +141,39 @@ def get_holding_quantity(symbol):
 
 # Data to be sent in the POST request
     
-print(get_all_transactions())
-data = {
-    'pair': 'SOLUSDT',
-    'price': '150.60',
-    'quantity': '1.3',
-    'amount': '48.60',
-    'status': '1',
-    'conditioned': '0',
-    'addon': 'additional_info',
-    'comment': 'This is a test',
-    'hashed_key': '84798394893',
-    'order_placed': 'BUY',
-    'profit': '0'
-}
-insert_transaction(data)
+# print(get_all_transactions())
+# data = {
+#     'pair': 'SOLUSDT',
+#     'price': '150.60',
+#     'quantity': '1.3',
+#     'amount': '48.60',
+#     'status': '1',
+#     'conditioned': '0',
+#     'addon': 'additional_info',
+#     'comment': 'This is a test',
+#     'hashed_key': '84798394893',
+#     'order_placed': 'BUY',
+#     'profit': '0'
+# }
+# insert_transaction(data)
+# print(get_all_transactions())
+
+transactions = get_all_transactions()
+print(transactions)
+pair = "SOLUSDT"
+the_last = find_last_transaction(transactions, pair)
+print(the_last)
+print(the_last["price"])
+
+if the_last["order_placed"].lower():
+    print("Last was a buy order")
+    #so hold on to confirm sell. We can either check for usdt hold or sell order id state
+
+else:
+    print("we can now buy")
+    # let's buy some...
 
 
-print(get_all_transactions())
 '''
 if __name__ == "__main__":
     pair = "SOLUSDT"  # Replace with your trading pair

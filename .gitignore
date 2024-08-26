@@ -166,3 +166,5 @@ cython_debug/
 #private files
 *.pem
 test.py
+test2.py
+keys.php
