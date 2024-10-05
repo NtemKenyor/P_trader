@@ -671,8 +671,10 @@ if pair_price is not None:
                             'comment': 'Sold successfully. Quantity refers to current holdings.',
                             'hashed_key': SENDER_SCRIPT_ID,
                             'order_placed': 'SELL',
-                            'profit': (bought_price + THRESH_POINT) - bought_price
+                            'profit': (bought_price + THRESH_POINT) - bought_price,
+                            'conditioned': '0'  # Add the conditioned parameter
                         }
+
 
                         insert_transaction(transaction_data)
                         send_data_to_php(EMAILER_KEY, str(data_log) + " <br/> <br/> "+ str(transaction_data))
