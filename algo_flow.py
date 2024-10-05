@@ -675,7 +675,7 @@ if pair_price is not None:
                         }
 
                         insert_transaction(transaction_data)
-                        send_data_to_php(EMAILER_KEY, str(data_log + " <br/> <br/> "+ transaction_data))
+                        send_data_to_php(EMAILER_KEY, str(data_log) + " <br/> <br/> "+ str(transaction_data))
                     else:
                         print("Waiting for better market conditions.")
                         data_log += "Market conditions not favorable yet. * \n"
