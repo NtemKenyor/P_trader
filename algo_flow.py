@@ -644,7 +644,8 @@ if pair_price is not None:
                 bought_price = float(last_transaction["price"])
                 amount_spent = float(last_transaction["amount"])
                 target_price = bought_price + THRESH_POINT if (bought_price + THRESH_POINT) > pair_price else pair_price
-
+                print(holding_quantity, bought_quantity)
+                
                 if holding_quantity >= bought_quantity:
                     print(f"Holding enough SOL to sell: {holding_quantity} SOL")
                     data_log += f"Attempting to sell at {target_price} * \n"
