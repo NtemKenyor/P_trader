@@ -624,75 +624,78 @@ data_log = "Debug tooler: "
 pair_price = get_current_price(pair)
 
 if pair_price is not None:
-    if pair_price < tradable_mark:  # Buy condition
-        transactions = get_all_transactions()
-        
-        if transactions:
-            usdt_quantity = get_holding_quantity(stable_token)
-            if usdt_quantity is not None:
-                print(f"Current USDT balance: {usdt_quantity}")
+    # if pair_price < tradable_mark:  # Buy condition
+    transactions = get_all_transactions()
+    
+    if transactions:
+        usdt_quantity = get_holding_quantity(stable_token)
+        if usdt_quantity is not None:
+            print(f"Current USDT balance: {usdt_quantity}")
 
-                last_transaction = find_last_transaction(transactions, pair)
-                data_log += f"Last transaction: {last_transaction} * \n"
-                
-                # Step 2: Determine if the last transaction was a 'buy'
-                if "buy" in last_transaction["order_placed"].lower():
-                    print("Last transaction was a buy. Checking if we can sell.")
-                    token_symbol = pair.replace("USDT", "")
-                    holding_quantity = get_holding_quantity(token_symbol)
-                    bought_quantity = float(last_transaction["quantity"])
-                    bought_price = float(last_transaction["price"])
-                    amount_spent = float(last_transaction["amount"])
+            last_transaction = find_last_transaction(transactions, pair)
+            data_log += f"Last transaction: {last_transaction} * \n"
+            
+            # Step 2: Determine if the last transaction was a 'buy'
+            if "buy" in last_transaction["order_placed"].lower():
+                print("Last transaction was a buy. Checking if we can sell.")
+                token_symbol = pair.replace("USDT", "")
+                holding_quantity = get_holding_quantity(token_symbol)
+                bought_quantity = float(last_transaction["quantity"])
+                bought_price = float(last_transaction["price"])
+                amount_spent = float(last_transaction["amount"])
 
-                    if holding_quantity >= bought_quantity:
-                        print(f"Holding enough SOL to sell: {holding_quantity} SOL")
-                        target_price = bought_price + THRESH_POINT
-                        data_log += f"Attempting to sell at {target_price} * \n"
+                if holding_quantity >= bought_quantity:
+                    print(f"Holding enough SOL to sell: {holding_quantity} SOL")
+                    target_price = bought_price + THRESH_POINT
+                    data_log += f"Attempting to sell at {target_price} * \n"
 
-                        # Attempt to sell
-                        sells_data = seller_side(target_price, holding_quantity)
-                        print(sells_data)
+                    # Attempt to sell
+                    sells_data = seller_side(target_price, holding_quantity)
+                    print(sells_data)
 
-                    elif holding_quantity < bought_quantity:
-                        print("Appears we already sold some tokens. Checking USDT balance.")
-                        if usdt_quantity > amount_spent:
-                            # Record the completed sell
-                            info_ = (f"Previously held **{last_transaction['comment']}**, "
-                                     f"bought {bought_quantity} of {pair}, now sold and hold {usdt_quantity} USDT.")
-                            transaction_data = {
-                                'pair': pair,
-                                'price': bought_price + THRESH_POINT,
-                                'quantity': holding_quantity,
-                                'amount': bought_price * bought_quantity,
-                                'status': '0',
-                                'addon': info_,
-                                'comment': 'Sold successfully. Quantity refers to current holdings.',
-                                'hashed_key': SENDER_SCRIPT_ID,
-                                'order_placed': 'SELL',
-                                'profit': (bought_price + THRESH_POINT) - bought_price
-                            }
+                elif holding_quantity < bought_quantity:
+                    print("Appears we already sold some tokens. Checking USDT balance.")
+                    if usdt_quantity > amount_spent:
+                        # Record the completed sell
+                        info_ = (f"Previously held **{last_transaction['comment']}**, "
+                                    f"bought {bought_quantity} of {pair}, now sold and hold {usdt_quantity} USDT.")
+                        transaction_data = {
+                            'pair': pair,
+                            'price': bought_price + THRESH_POINT,
+                            'quantity': holding_quantity,
+                            'amount': bought_price * bought_quantity,
+                            'status': '0',
+                            'addon': info_,
+                            'comment': 'Sold successfully. Quantity refers to current holdings.',
+                            'hashed_key': SENDER_SCRIPT_ID,
+                            'order_placed': 'SELL',
+                            'profit': (bought_price + THRESH_POINT) - bought_price
+                        }
 
-                            insert_transaction(transaction_data)
-                            send_data_to_php(EMAILER_KEY, str(data_log))
-                        else:
-                            print("Waiting for better market conditions.")
-                            data_log += "Market conditions not favorable yet. * \n"
+                        insert_transaction(transaction_data)
+                        send_data_to_php(EMAILER_KEY, str(data_log))
                     else:
-                        print("Order mismatch or sell order might be open. Waiting...")
-                        data_log += "Order quantity mismatch. Sell order may already be open. * \n"
+                        print("Waiting for better market conditions.")
+                        data_log += "Market conditions not favorable yet. * \n"
                 else:
-                    # Step 3: Execute buy order if no recent buy is detected
-                    # tradable_usdt_mark = usdt_quantity - investment
+                    print("Order mismatch or sell order might be open. Waiting...")
+                    data_log += "Order quantity mismatch. Sell order may already be open. * \n"
+            else:
+                # Step 3: Execute buy order if no recent buy is detected
+                # tradable_usdt_mark = usdt_quantity - investment
+                if pair_price < tradable_mark:  
+                    #can buy now
                     print("No recent buy detected. Ready to place a buy order.")
                     data_log += "Ready to place a buy order. * \n"
                     investment_manny()
-            else:
-                data_log += "Error retrieving USDT quantity or insufficient balance. * \n"
+                else:
+                    print(f"Current price {pair_price} exceeds tradable mark {tradable_mark}. Not buying.")
+                    data_log += f"Price above tradable mark: {pair_price}. * \n"
+                
         else:
-            data_log += "No transaction data available. * \n"
+            data_log += "Error retrieving USDT quantity or insufficient balance. * \n"
     else:
-        print(f"Current price {pair_price} exceeds tradable mark {tradable_mark}. Not buying.")
-        data_log += f"Price above tradable mark: {pair_price}. * \n"
+        data_log += "No transaction data available. * \n"
 else:
     print("Error fetching the current price. Unable to proceed.")
     data_log += "Could not fetch the current price. * \n"
