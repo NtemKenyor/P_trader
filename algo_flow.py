@@ -549,7 +549,7 @@ def send_data_to_php(email_key, data):
 
 
 def seller_side(sold_price, holding_quantity):
-    selling_price = pair_price if (pair_price > (sold_price + THRESH_POINT)) else sold_price + THRESH_PONIT
+    selling_price = pair_price if (pair_price > (sold_price + THRESH_POINT)) else sold_price + THRESH_POINT
     t_quantity, f_quantity, ad_price, filtered_sp, filtered_slp = sell_filter(symbol, holding_quantity, selling_price, selling_price, pair_price)
     if f_quantity:
         # Place your OCO sell order using filtered_quantity
