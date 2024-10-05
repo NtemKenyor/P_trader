@@ -643,8 +643,9 @@ if pair_price is not None:
                 bought_quantity = float(last_transaction["quantity"])
                 bought_price = float(last_transaction["price"])
                 amount_spent = float(last_transaction["amount"])
-                target_price = bought_price + THRESH_POINT if (bought_price + THRESH_POINT) > pair_price else pair_price
-                print(holding_quantity, bought_quantity)
+                # target_price = bought_price + THRESH_POINT if (bought_price + THRESH_POINT) > pair_price else pair_price  #already done in the seller function
+                target_price = bought_price + THRESH_POINT
+                print(f"Confirmed holding: {holding_quantity}, Bought Price: {bought_quantity}")
 
                 if holding_quantity >= bought_quantity:
                     print(f"Holding enough SOL to sell: {holding_quantity} SOL")
