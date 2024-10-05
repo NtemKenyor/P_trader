@@ -509,7 +509,7 @@ def insert_transaction(data):
         response.raise_for_status()  # Raise an exception for HTTP errors
         if response.status_code == 200:
             print("Transaction successfully inserted.")
-            #print(response.text)
+            print(response.text)
             return response.json()
         else:
             print("Failed to insert transaction:", response.status_code)
@@ -681,9 +681,9 @@ if pair_price is not None:
                         data_log += "Market conditions not favorable yet. * \n"
 
                         # Attempt to sell
-                        print("let's just try selling at the threshpoint. if no sell order exist")
-                        sells_data = seller_side(target_price, holding_quantity)
-                        print(sells_data)
+                        # print("let's just try selling at the threshpoint. if no sell order exist")
+                        # sells_data = seller_side(target_price, holding_quantity)
+                        # print(sells_data)
                         # try:
                         #     # Attempt to sell
                         #     print("let's just try selling at the threshpoint. if no sell order exist")
