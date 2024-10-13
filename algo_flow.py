@@ -622,7 +622,7 @@ def investment_manny():
 
 
 #you can change this section...
-THRESH_POINT = 1
+THRESH_POINT = 2
 stable_token = 'USDT'
 pair = "SOLUSDT"
 symbol = pair
@@ -642,7 +642,7 @@ if bid_price is not None and ask_price is not None:
     print(f"Current Bid Price: {bid_price}, Current Ask Price: {ask_price}")
     print(f"Pair Price {pair_price}")
     # if pair_price < tradable_mark:  # Buy condition
-    """transactions = get_all_transactions()
+    transactions = get_all_transactions()
     
     if transactions:
         usdt_quantity = get_holding_quantity(stable_token)
@@ -716,12 +716,13 @@ if bid_price is not None and ask_price is not None:
             else:
                 # Step 3: Execute buy order if no recent buy is detected
                 # tradable_usdt_mark = usdt_quantity - investment
-                if pair_price < tradable_mark:  
+                if ask_price < tradable_mark:  
                     #can buy now
                     print("No recent buy detected. Ready to place a buy order.")
                     data_log += "Ready to place a buy order. * \n"
+                    pair_price = ask_price
                     investment_manny()
-                elif 
+
                 else:
                     print(f"Current price {pair_price} exceeds tradable mark {tradable_mark}. Not buying.")
                     data_log += f"Price above tradable mark: {pair_price}. * \n"
@@ -730,7 +731,7 @@ if bid_price is not None and ask_price is not None:
             data_log += "Error retrieving USDT quantity or insufficient balance. * \n"
     else:
         data_log += "No transaction data available. * \n"
-    """
+    
 else:
     print("Error fetching the current price. Unable to proceed.")
     data_log += "Could not fetch the current price. * \n"
