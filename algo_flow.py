@@ -722,6 +722,13 @@ if bid_price is not None and ask_price is not None:
                     data_log += "Ready to place a buy order. * \n"
                     pair_price = ask_price
                     investment_manny()
+                # I just observe some strange movement and I just wan to try stuffs out
+                elif( (ask_price - 10) < tradable_mark ):
+                    proposed_pair = ask_price - 10
+                    pair_price = proposed_pair
+                    print("Trying out the new condition of buying ahead")
+                    data_log += "Ready to place a buy order. but in the new condition * \n"
+                    investment_manny()
 
                 else:
                     print(f"Current price {pair_price} exceeds tradable mark {tradable_mark}. Not buying.")
