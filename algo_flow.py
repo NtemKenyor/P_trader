@@ -248,6 +248,18 @@ def get_current_price(symbol):
         print(f"Failed to get current price for {symbol}")
         return None
 
+def get_current_price_ask_bid(symbol):
+    url = f'https://api.binance.com/api/v3/ticker/bookTicker?symbol={symbol}'
+    response = requests.get(url)
+    data = response.json()
+    if 'bidPrice' in data and 'askPrice' in data:
+        bid_price = float(data['bidPrice'])  # Price to sell
+        ask_price = float(data['askPrice'])  # Price to buy
+        return bid_price, ask_price
+    else:
+        print(f"Failed to get current bid/ask price for {symbol}")
+        return None, None
+
 
 def place_oco_sell_order(symbol, quantity, price, stop_price):
 
@@ -622,10 +634,15 @@ data_log = "Debug tooler: "
 
 # Step 1: Get the current price of the trading pair
 pair_price = get_current_price(pair)
+bid_price, ask_price = get_current_price_ask_bid(pair)
 
-if pair_price is not None:
+# if pair_price is not None:
+if bid_price is not None and ask_price is not None:
+    pair_price = ask_price if pair_price is None else pair_price
+    print(f"Current Bid Price: {bid_price}, Current Ask Price: {ask_price}")
+    print(f"Pair Price {pair_price}")
     # if pair_price < tradable_mark:  # Buy condition
-    transactions = get_all_transactions()
+    """transactions = get_all_transactions()
     
     if transactions:
         usdt_quantity = get_holding_quantity(stable_token)
@@ -704,6 +721,7 @@ if pair_price is not None:
                     print("No recent buy detected. Ready to place a buy order.")
                     data_log += "Ready to place a buy order. * \n"
                     investment_manny()
+                elif 
                 else:
                     print(f"Current price {pair_price} exceeds tradable mark {tradable_mark}. Not buying.")
                     data_log += f"Price above tradable mark: {pair_price}. * \n"
@@ -712,6 +730,7 @@ if pair_price is not None:
             data_log += "Error retrieving USDT quantity or insufficient balance. * \n"
     else:
         data_log += "No transaction data available. * \n"
+    """
 else:
     print("Error fetching the current price. Unable to proceed.")
     data_log += "Could not fetch the current price. * \n"
