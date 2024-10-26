@@ -490,11 +490,27 @@ def sell_filter(symbol, quantity, stop_price, stop_limit_price, current_price):
         return truncated_quantity, quantity, adjusted_price, stop_price, stop_limit_price
 
 
+# def get_all_transactions():
+#     """Retrieve all transactions from the database."""
+#     response = requests.get(TRADES_API_URL_DIS)
+#     if response.status_code == 200:
+#         return response.json().get('row', [])
+#     else:
+#         print("Error fetching transactions:", response.status_code)
+#         return []
+
 def get_all_transactions():
-    """Retrieve all transactions from the database."""
+    """Retrieve all transactions unique to this bot from the database."""
     response = requests.get(TRADES_API_URL_DIS)
+    
     if response.status_code == 200:
-        return response.json().get('row', [])
+        transactions = response.json().get('row', [])
+        # Filter transactions by matching hashed_key with SENDER_SCRIPT_ID
+        bot_transactions = [
+            transaction for transaction in transactions
+            if transaction.get('hashed_key') == SENDER_SCRIPT_ID
+        ]
+        return bot_transactions
     else:
         print("Error fetching transactions:", response.status_code)
         return []
